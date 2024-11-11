@@ -1,0 +1,15 @@
+[
+    {
+        "id": "base",
+        "routes": [
+            "get-todos:success",
+            "get-todos-paginated:success",
+            "modify-todo:success"
+        ]
+    },
+    {
+        "id": "alternative",
+        "routes": ["get-todos:success"],
+        "from": "base"
+    }
+]
