@@ -2,11 +2,11 @@
 // https://www.mocks-server.org/docs/configuration/how-to-change-settings
 // https://www.mocks-server.org/docs/configuration/options
 
-const { only } = require('node:test')
+// const { only } = require("node:test")
 
 module.exports = {
 	// Log level. Can be one of silly, debug, verbose, info, warn or error
-	log: 'info',
+	log: "info",
 	config: {
 		// Allow unknown arguments
 		//allowUnknownArguments: false,
@@ -50,12 +50,12 @@ module.exports = {
 			delay: 200
 		},
 		collections: {
-			selected: 'base'
+			selected: "base"
 		}
 	},
 	server: {
 		// Port number for the server to be listening at
-		port: 3100,
+		port: 5000,
 		// Host for the server
 		//host: "0.0.0.0",
 		cors: {
@@ -89,7 +89,7 @@ module.exports = {
 		// Allows to disable files load
 		enabled: true,
 		// Define folder from where to load collections and routes
-		path: './mocks',
+		path: "./mocks",
 		// Enable/disable files watcher
 		watch: true,
 		babelRegister: {

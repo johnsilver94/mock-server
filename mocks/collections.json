@@ -4,7 +4,10 @@
         "routes": [
             "get-todos:success",
             "get-todos-paginated:success",
-            "modify-todo:success"
+            "get-todo:success",
+            "create-todo:success",
+            "update-todo:success",
+            "delete-todo:success"
         ]
     },
     {

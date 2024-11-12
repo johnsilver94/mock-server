@@ -1,105 +1,44 @@
-const todosList = [{ id: '1', title: 'Todo 1', description: 'Todo 1 description', completed: true, createdAt: new Date() }]
-
-const todoPaginated = {
-	data: [
-		{
-			id: 8,
-			title: 'task 8',
-			description: 'description',
-			completed: true,
-			createdAt: '2024-09-30T20:59:43.328Z',
-			updatedAt: '2024-10-07T19:50:40.503Z'
-		},
-		{
-			id: 19,
-			title: 'new task',
-			description: 'default',
-			completed: true,
-			createdAt: '2024-10-07T19:53:46.112Z',
-			updatedAt: '2024-10-07T19:54:01.713Z'
-		},
-		{
-			id: 3,
-			title: 'task 3',
-			description: 'default',
-			completed: true,
-			createdAt: '2024-09-30T20:59:39.758Z',
-			updatedAt: '2024-10-07T19:54:03.895Z'
-		},
-		{
-			id: 4,
-			title: 'task 4',
-			description: 'description',
-			completed: true,
-			createdAt: '2024-09-30T20:59:40.501Z',
-			updatedAt: '2024-10-07T19:55:25.720Z'
-		},
-		{
-			id: 5,
-			title: 'task 5',
-			description: 'description',
-			completed: true,
-			createdAt: '2024-09-30T20:59:40.501Z',
-			updatedAt: '2024-10-07T19:55:25.720Z'
-		},
-		{
-			id: 6,
-			title: 'task 6',
-			description: 'description',
-			completed: true,
-			createdAt: '2024-09-30T20:59:40.501Z',
-			updatedAt: '2024-10-07T19:55:25.720Z'
-		}
-	],
-	pagination: {
-		pageNumber: 1,
-		pageSize: 5,
-		pagesCount: 2,
-		itemsCount: 6
-	}
-}
+const todos = require("../fixtures/todos")
 
 module.exports = [
 	{
-		id: 'get-todos', // id of the route
-		url: '/api/todos', // url in path-to-regexp format
-		method: 'GET', // HTTP method
+		id: "get-todos", // id of the route
+		url: "/api/todos", // url in path-to-regexp format
+		method: "GET", // HTTP method
 		variants: [
 			{
-				id: 'success', // id of the variant
-				type: 'json', // variant type
+				id: "success", // id of the variant
+				type: "json", // variant type
 				options: {
 					status: 200,
-					body: todosList
+					body: todos
 				}
 			}
 		]
 	},
 	{
-		id: 'get-todos-paginated', // id of the route
-		url: '/api/todos/paginated', // url in path-to-regexp format
-		method: 'POST', // HTTP method
+		id: "get-todos-paginated", // id of the route
+		url: "/api/todos/paginated", // url in path-to-regexp format
+		method: "POST", // HTTP method
 		variants: [
 			{
-				id: 'success', // id of the variant
-				type: 'middleware', // variant type
+				id: "success", // id of the variant
+				type: "middleware", // variant type
 				options: {
 					middleware: (req, res, next, core) => {
-						core.logger.info('Request received!')
-						const body = req.body
-						const { pageNumber, pageSize } = body
+						core.logger.info("Request received!")
+						const { pageNumber, pageSize } = req.body
 
 						const todoRes = {
-							data: todoPaginated.data.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
+							data: todos.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
 							pagination: {
 								pageNumber,
 								pageSize,
-								pagesCount: Math.ceil(todoPaginated.data.length / pageSize),
-								itemsCount: todoPaginated.data.length
+								pagesCount: Math.ceil(todos.length / pageSize),
+								itemsCount: todos.length
 							}
 						}
 
-						console.log(req.body)
 						res.status(200)
 						res.send(todoRes)
 					}
@@ -108,16 +47,117 @@ module.exports = [
 		]
 	},
 	{
-		id: 'modify-todo', // id of the route
-		url: '/api/todos/:id', // url in path-to-regexp format
-		method: ['PATCH', 'PUT'], // HTTP methods
+		id: "get-todo", // id of the route
+		url: "/api/todos/:id", // url in path-to-regexp format
+		method: "GET", // HTTP method
 		variants: [
 			{
-				id: 'success', // id of the variant
-				type: 'json', // variant type
+				id: "success", // id of the variant
+				type: "middleware", // variant type
 				options: {
-					status: 200,
-					body: todosList[0]
+					middleware: (req, res, next, core) => {
+						core.logger.info("Request received!")
+						const { id } = req.params
+
+						const todoRes = todos.find((todo) => todo.id === parseInt(id))
+
+						if (!todoRes) {
+							return res.status(404).send({ error: "Todo not found" })
+						}
+
+						res.status(200)
+						res.send(todoRes)
+					}
+				}
+			}
+		]
+	},
+	{
+		id: "create-todo", // id of the route
+		url: "/api/todos", // url in path-to-regexp format
+		method: ["POST"], // HTTP methods
+		variants: [
+			{
+				id: "success", // id of the variant
+				type: "middleware", // variant type
+				options: {
+					middleware: (req, res, next, core) => {
+						core.logger.info("Request received!")
+						const body = req.body
+						console.log("🚀 ~ body:", body)
+
+						const newTodo = {
+							...body,
+							id: Math.max(...todos.map((todo) => todo.id)) + 1,
+							createdAt: new Date(),
+							updatedAt: new Date()
+						}
+
+						todos.push(newTodo)
+
+						res.status(201)
+						res.send(newTodo)
+					}
+				}
+			}
+		]
+	},
+	{
+		id: "update-todo", // id of the route
+		url: "/api/todos/:id", // url in path-to-regexp format
+		method: ["PATCH", "PUT"], // HTTP methods
+		variants: [
+			{
+				id: "success", // id of the variant
+				type: "middleware", // variant type
+				options: {
+					middleware: (req, res, next, core) => {
+						core.logger.info("Request received!")
+						const { id } = req.params
+						const body = req.body
+
+						const todoIndex = todos.findIndex((todo) => todo.id === parseInt(id))
+
+						if (todoIndex === -1) {
+							res.status(404)
+							res.send({ error: "Todo not found" })
+							return
+						}
+
+						todos[todoIndex] = { ...todos[todoIndex], ...body, updatedAt: new Date() }
+
+						res.status(200)
+						res.send(todos[todoIndex])
+					}
+				}
+			}
+		]
+	},
+	{
+		id: "delete-todo", // id of the route
+		url: "/api/todos/:id", // url in path-to-regexp format
+		method: ["DELETE"], // HTTP methods
+		variants: [
+			{
+				id: "success", // id of the variant
+				type: "middleware", // variant type
+				options: {
+					middleware: (req, res, next, core) => {
+						core.logger.info("Request received!")
+						const { id } = req.params
+
+						const todoIndex = todos.findIndex((todo) => todo.id === parseInt(id))
+
+						if (todoIndex === -1) {
+							res.status(404)
+							res.send({ error: "Todo not found" })
+							return
+						}
+
+						todos.splice(todoIndex, 1)
+
+						res.status(200).send()
+					}
 				}
 			}
 		]
