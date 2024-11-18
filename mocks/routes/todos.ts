@@ -1,5 +1,5 @@
-import { Todo } from "../../types";
-import { todos } from "../fixtures/todos";
+import { Todo } from "../../types"
+import { todos } from "../fixtures/todos"
 
 const routes = [
 	{
@@ -165,4 +165,4 @@ const routes = [
 	}
 ]
 
-export default routes;
+export default routes
