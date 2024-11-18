@@ -1,6 +1,7 @@
-const todos = require("../fixtures/todos")
+import { Todo } from "../../types";
+import { todos } from "../fixtures/todos";
 
-module.exports = [
+const routes = [
 	{
 		id: "get-todos", // id of the route
 		url: "/api/todos", // url in path-to-regexp format
@@ -86,7 +87,7 @@ module.exports = [
 						const body = req.body
 						console.log("🚀 ~ body:", body)
 
-						const newTodo = {
+						const newTodo: Todo = {
 							...body,
 							id: Math.max(...todos.map((todo) => todo.id)) + 1,
 							createdAt: new Date(),
@@ -163,3 +164,5 @@ module.exports = [
 		]
 	}
 ]
+
+export default routes;

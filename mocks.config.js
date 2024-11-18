@@ -94,10 +94,10 @@ module.exports = {
 		watch: true,
 		babelRegister: {
 			// Load @babel/register
-			// enabled: true,
+			enabled: true,
 			// Options for @babel/register
 			options: {
-				// only: ['/mocks/']
+				// only: ["/mocks/"]
 			}
 		}
 	},

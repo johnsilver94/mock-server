@@ -1,4 +1,6 @@
-module.exports = [
+import { Todo } from "../../types";
+
+export const todos: Todo[] = [
 	{
 		id: 3,
 		title: "task 3",
