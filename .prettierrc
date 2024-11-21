@@ -1,5 +1,5 @@
 {
-  "useTabs": true,
+  	"useTabs": true,
 	"tabWidth": 2,
 	"trailingComma": "none",
 	"semi": false,
@@ -10,19 +10,5 @@
 	"bracketSpacing": true,
 	"bracketSameLine": true,
 	"arrowParens": "always",
-	"proseWrap": "always",
-  "overrides": [
-    			{
-				"files": "*.html",
-				"options": {
-					"parser":"html"
-				}
-			},
-			{
-				"files": "*.component.html",
-				"options": {
-					"parser":"angular"
-				}
-			}
-  ]
+	"proseWrap": "always"
 }
